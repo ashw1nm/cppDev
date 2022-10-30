@@ -1,0 +1,58 @@
+/*
+ * Counting bits
+ */ 
+
+// Simple trick if a number is odd then shift right number has the same number of bits set to 1
+// If the number is odd then the bit shifted out is 1 so add a 1.
+class Solution {
+public:
+    vector<int> countBits(int n) {
+        vector<int> ret(n+1, 0);
+        ret[0]= 0;
+        for (uint i = 1; i <= n; i++) {
+
+            if (i & 1 == 1) {
+                // i is odd
+                ret[i] = ret[i >> 1] + 1;
+            } else {
+                // i is even
+                ret[i] = ret[i >> 1];
+            }
+        }
+        return ret;
+    }
+};
+
+// Another solution, this is tabulated dp solution where we build the array up from 0, 1, 2 
+// Here the 0-7 will be the same for 8-15, just that 8 to 15 has one bit more than (0 - 7)
+
+class Solution {
+public:
+    vector<int> countBits(int n) {
+        if (n < 0) {
+            vector<int> ret;
+            return ret;
+        } else {
+            vector<int> ret(n+1, 0);
+            ret[0] = 0;
+            if (n == 0) {
+                return ret;
+            }
+            ret[1] = 1;
+
+            uint bpos = 1;
+            uint i = 2;
+            while (i <= n) {
+                uint num2x = 1 << bpos;
+
+                for (int j = 0 ; j < num2x && i <= n; j++) {
+                    ret[i] = 1 + ret[j];
+                    i++;
+                }
+                bpos++;
+
+            }
+            return ret;
+        }
+    }
+};
